@@ -1,64 +1,60 @@
-react-dom - hot-loader edition
-=====
-This is normal `react-dom` with some patches applied to be more 
-[React-Hot-Loader](https://github.com/gaearon/react-hot-loader) friendly.
+# `react-dom`
 
-Use it to obtain more 🔥 dev experience.
+This package serves as the entry point to the DOM and server renderers for React. It is intended to be paired with the generic React package, which is shipped as `react` to npm.
 
-# Differences from react
-There are just a few changed lines, see [patch.js](https://github.com/gaearon/react-hot-loader/blob/master/src/webpack/patch.js) for details
+## Installation
 
-# Using this module
-
-## Install
-```text
-yarn add @hot-loader/react-dom@YOUR_REACT_VERSION
+```sh
+npm install react react-dom
 ```
-> Right now only 16.7.0+ versions are available
 
-## Rewire
-To use this version of React-dom you have to rewire your application
+## Usage
 
-### Webpack
-just configure your webpack to alias this package, instead of a real react-dom.
-See https://webpack.js.org/configuration/resolve/#resolve-alias
+### In the browser
+
 ```js
-// webpack.conf
-...
-resolve: {
-    alias: {
-      'react-dom': '@hot-loader/react-dom'
-    }
+import { createRoot } from 'react-dom/client';
+
+function App() {
+  return <div>Hello World</div>;
 }
-...
+
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
 ```
-You may set configuration to only use react-🔥-dom only in dev mode.
-### Parcel
-Use `alias` field in `package.json` to rewire your project. This will affect dev and production modes.
-See https://github.com/parcel-bundler/parcel/pull/850
+
+### On the server
+
 ```js
-{
-  "alias": {
-    "react-dom": "@hot-loader/react-dom"
-  }
+import { renderToPipeableStream } from 'react-dom/server';
+
+function App() {
+  return <div>Hello World</div>;
+}
+
+function handleRequest(res) {
+  // ... in your server handler ...
+  const stream = renderToPipeableStream(<App />, {
+    onShellReady() {
+      res.statusCode = 200;
+      res.setHeader('Content-type', 'text/html');
+      stream.pipe(res);
+    },
+    // ...
+  });
 }
 ```
 
-### (Yarn) Any other system
-For any other build system, which may not support aliasing - use yarn name resolution.
-See https://twitter.com/sebmck/status/873958247304232961?lang=en for details.
-```text
-yarn add react-dom@npm:@hot-loader/react-dom
-```
+## API
 
-# Using webpack-loader
-React-hot-loader's webpack-loader could land necessary patches on
-build time. If you can use it instead of this package, if you can.
+### `react-dom`
 
-# Production ready
-production bundle, exported by this package is __identical to the original
-react-dom.production.min.js__. It is safe to keep rewiring in production.
+See https://reactjs.org/docs/react-dom.html
 
+### `react-dom/client`
 
-# License
-React is MIT licensed. This library is still react
+See https://reactjs.org/docs/react-dom-client.html
+
+### `react-dom/server`
+
+See https://reactjs.org/docs/react-dom-server.html

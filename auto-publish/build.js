@@ -5,7 +5,7 @@ const { getAndPatchGivenReactDOMVersionWithGivenRHLVersion } = require("./utils"
 (async () => {
   const targetDir = await getAndPatchGivenReactDOMVersionWithGivenRHLVersion(
     path.resolve(__dirname, "staging-area"),
-    "^16.8.6",
+    "^18.2.0",
     "^4.12.3",
     "hot-loader"
   );
